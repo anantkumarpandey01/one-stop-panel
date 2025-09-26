@@ -14,7 +14,7 @@
                 <img src="assets/img/logo/logo.png" alt="..." style="width:40%;">
                 <div class="ak-height-15 ak-height-lg-10"></div>
             </div>
-                    <p  class="desp">Contact One Stop Panel and Paint Ltd at <?php echo $address; ?> NZ for top denting and painting services since <?php echo $year; ?>.</p>
+                    <p  class="desp">Contact One Stop Panel and Paint <?php echo $year; ?> Ltd at <?php echo $address; ?> NZ for top denting and painting services since <?php echo $year; ?>.</p>
                     <div class="ak-height-35 ak-height-lg-30"></div>
                     <div class="d-flex align-items-center gap-3">
                         <div class="heartbeat-icon">
@@ -116,8 +116,8 @@
             </div>
             <div class="ak-height-70 ak-height-lg-30"></div>
             <div class="primary-color-border"></div>
-            <div class="copy-right">
-                <p class="title  text-hover-animaiton">Copyright 2025, All Right reserved</p>
+            <div class="copy-right text-center">
+                <p class="title  text-hover-animaiton">Copyright 2025, All Right reserved. Developed By: <a href="tel:+642904305672">HM</a></p>
                 <div class="social-icon">
                     <a href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">

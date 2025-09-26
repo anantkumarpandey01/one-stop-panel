@@ -5,17 +5,7 @@ use MailerSend\Helpers\Builder\Recipient;
 use MailerSend\Helpers\Builder\EmailParams;
 include 'inc/config.php';
 include 'inc/header.php';
-
-
-echo "Reached dotenv load...<br>";
-flush();
-
-use Dotenv\Dotenv;
-$dotenv = Dotenv::createImmutable(__DIR__); 
-$dotenv->safeLoad();
-
-echo "Dotenv loaded.<br>";
-flush();
+ 
 
 $success = '';
 $error = '';
@@ -29,8 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $captcha_response = json_decode($verify);
     $captcha_response = 1;
 
-    if ($captcha_response==1) {
-        $location = $_POST['location'] ?? '';
+    if ($captcha_response == 1) {
         $date = $_POST['date'] ?? '';
         $time = $_POST['time'] ?? '';
         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
@@ -44,16 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Send email using MailerSend
         try {
-            var_dump($_ENV['MAILERSEND_API_KEY']); //  Check if API key is loaded
+            var_dump($_ENV['MAILERSEND_API_KEY']); // Debug: Check if API key is loaded
             $mailersend = new MailerSend(['api_key' => $_ENV['MAILERSEND_API_KEY']]);
             $recipients = [new Recipient($email, $name)];
             $emailParams = (new EmailParams())
-                ->setFrom('onestoppanel2023@gmail.com')  
+                ->setFrom('onestoppanel2023@gmail.com') // Ensure this is verified
                 ->setTo($recipients)
                 ->setSubject('Appointment Confirmation')
                 ->setHtml("
                     <h3>Appointment Details</h3>
-                    <p><strong>Location:</strong> $location</p>
                     <p><strong>Date:</strong> $date</p>
                     <p><strong>Time:</strong> $time</p>
                     <p><strong>Name:</strong> $name</p>
@@ -65,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p><strong>Claim Number:</strong> $claim_num</p>
                     <p><strong>Notes:</strong> $notes</p>
                 ")
-                ->setText("Appointment Details\nLocation: $location\nDate: $date\nTime: $time\nName: $name\nPhone: $phone\nEmail: $email\nAddress: $address\nVehicle Registration: $vehicle_reg\nInsurer: $insurer\nClaim Number: $claim_num\nNotes: $notes");
+                ->setText("Appointment Details\nDate: $date\nTime: $time\nName: $name\nPhone: $phone\nEmail: $email\nAddress: $address\nVehicle Registration: $vehicle_reg\nInsurer: $insurer\nClaim Number: $claim_num\nNotes: $notes");
 
             $mailersend->email->send($emailParams);
             $success = 'Appointment booked successfully! Confirmation email sent.';
@@ -95,40 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form id="multi-step-form" class="multi-step-form" method="POST" action="">
-            <!-- Step 1: Select Location -->
+            <!-- Step 1: Select Date and Time -->
             <div class="step active" data-step="1">
-                <h3>Select a Location</h3>
-                <div class="locations" data-aos="fade-up" data-aos-delay="750">
-                    <div class="location-item">
-                        <input type="radio" hidden id="loc1" name="location" value="Wellington City - Sky Stadium (89 Waterloo Quay, Pipitea, Wellington, 6011)" required>
-                        <label for="loc1" class="location-card">
-                            <img src="assets/img/wellington.png" alt="Wellington City">
-                            <div>
-                                <h4 class="pb-0 mb-0">Wellington City - Sky Stadium (89 Waterloo Quay, Pipitea, Wellington, 6011)</h4>
-                                <p class="pt-0 mt-0"><small>Most estimate appointments take just 15 Minutes</small></p>
-                                <p><br><b>Online bookings</b> are for vehicles that are driveable only - If your vehicle needs to be towed please call our customer service team<br><br><b>Multiple locations</b> - Assessments and Repairs do not necessarily need to be completed at the same branch so check availability at other branches online or discuss options for the soonest availability with our friendly Customer Service staff.<br><br>Please choose a location and follow the instructions to book online.<br><br><b>Remote assessment</b> - are available on request where feasible depending on the level of damage.</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="location-item">
-                        <input type="radio" hidden id="loc2" name="location" value="Johnsonville (2 Frank Johnson Street, Johnsonville, 6037)" required>
-                        <label for="loc2" class="location-card">
-                            <img src="assets/img/wellington.png" alt="Johnsonville">
-                            <div>
-                                <h4 class="pb-0 mb-0">Johnsonville (2 Frank Johnson Street, Johnsonville, 6037)</h4>
-                                <p class="pt-0 mt-0"><small>Most estimate appointments take just 15 Minutes</small></p>
-                                <p><br><b>Online bookings</b> are for vehicles that are driveable only - If your vehicle needs to be towed please call our customer service team<br><br><b>Multiple locations</b> - Assessments and Repairs do not necessarily need to be completed at the same branch so check availability at other branches online or discuss options for the soonest availability with our friendly Customer Service staff.<br><br>Please choose a location and follow the instructions to book online.<br><br><b>Remote assessment</b> - are available on request where feasible depending on the level of damage.</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Step 2: Select Date and Time -->
-            <div class="step" data-step="2">
                 <h3>Pick a Date and Time</h3>
                 <p>Duration: 15 minutes</p>
-                <p id="selected-location"></p>
                 <div class="calendar-section" data-aos="fade-up" data-aos-delay="750">
                     <div class="calendar-header">
                         <button type="button" class="nav-month" data-dir="-1">&lt;</button>
@@ -150,11 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Step 3: Provide Information -->
-            <div class="step" data-step="3">
+            <!-- Step 2: Provide Information -->
+            <div class="step" data-step="2">
                 <h3>Provide Information</h3>
-                <p>Workshop Location: <span id="info-location"></span></p>
-                <p>Reference: <span id="info-reference"></span></p>
                 <p>Time: <span id="info-date"></span>, <span id="info-time"></span> - <span id="info-end-time"></span></p>
                 <div class="form-inputs" data-aos="fade-up" data-aos-delay="750">
                     <label for="name">Your name*</label>
@@ -258,20 +214,15 @@ document.addEventListener('DOMContentLoaded', function() {
         nextBtn.style.display = step < steps.length ? 'inline-block' : 'none';
         submitBtn.style.display = step === steps.length ? 'inline-block' : 'none';
 
-        if (step === 2) {
-            const location = form.querySelector('input[name="location"]:checked')?.value;
-            document.getElementById('selected-location').textContent = location || 'No location selected';
+        if (step === 1) {
             renderCalendar();
             const selectedDate = document.getElementById('selected-date-value').value || currentDateStr;
             generateTimeSlots(selectedDate);
         }
-        if (step === 3) {
-            const location = form.querySelector('input[name="location"]:checked')?.value;
+        if (step === 2) {
             const time = form.querySelector('input[name="time"]:checked')?.value;
             const date = document.getElementById('selected-date-value').value;
             const endTime = new Date(`${date} ${time}`).getTime() + 15 * 60000;
-            document.getElementById('info-location').textContent = location || 'Unknown';
-            document.getElementById('info-reference').textContent = location || 'Unknown';
             document.getElementById('info-date').textContent = date ? new Date(date).toLocaleDateString() : 'Unknown';
             document.getElementById('info-time').textContent = time || 'Unknown';
             document.getElementById('info-end-time').textContent = new Date(endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -329,8 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     nextBtn.addEventListener('click', () => {
-        if (currentStep === 1 && !form.querySelector('input[name="location"]:checked')) return;
-        if (currentStep === 2 && (!form.querySelector('input[name="time"]:checked') || !document.getElementById('selected-date-value').value)) return;
+        if (currentStep === 1 && (!form.querySelector('input[name="time"]:checked') || !document.getElementById('selected-date-value').value)) return;
         if (currentStep < steps.length) {
             currentStep++;
             showStep(currentStep);
@@ -344,18 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    form.querySelectorAll('input[name="location"]').forEach(input => {
-        input.addEventListener('change', () => {
-            if (currentStep === 1) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        });
-    });
-
     form.querySelectorAll('#time-options').forEach(container => {
         container.addEventListener('change', (e) => {
-            if (e.target.name === 'time' && currentStep === 2) {
+            if (e.target.name === 'time' && currentStep === 1) {
                 const time = e.target.value;
                 const date = document.getElementById('selected-date-value').value;
                 if (date && time) alert(`Your selected date: ${new Date(date).toLocaleDateString()} and time: ${time}`);

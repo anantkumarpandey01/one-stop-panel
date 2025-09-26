@@ -6,7 +6,7 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide">
                 <div class="ak-hero ak-style1 slide-inner">
-                    <img src="assets/img/hero_slider_bg_1.png" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 1">
+                    <img src="assets/img/hero_slider_bg_1.png?v=2" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 1">
                     <div class="container">
                         <div class="hero-slider-info">
                             <div class="slider-info">
@@ -28,7 +28,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="ak-hero ak-style1 slide-inner">
-                    <img src="assets/img/hero_slider_bg_2.png" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 2">
+                    <img src="assets/img/hero_slider_bg_2.png?v=2" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 2">
                     <div class="container">
                         <div class="hero-slider-info">
                             <div class="slider-info">
@@ -50,7 +50,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="ak-hero ak-style1  slide-inner">
-                    <img src="assets/img/hero_slider_bg_3.png" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 3">
+                    <img src="assets/img/hero_slider_bg_3.png?v=2" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 3">
                     <div class="container">
                         <div class="hero-slider-info">
                             <div class="slider-info">
@@ -75,7 +75,7 @@
             </div>
             <div class="swiper-slide">
                 <div class="ak-hero ak-style1 slide-inner">
-                    <img src="assets/img/hero_slider_bg_4.png" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 4">
+                    <img src="assets/img/hero_slider_bg_4.png?v=2" class="ak-hero-bg ak-bg object-cover" alt="one stop panel slider 4">
                     <div class="container">
                         <div class="hero-slider-info">
                             <div class="slider-info">
@@ -373,10 +373,15 @@
     <div class="d-flex justify-content-center mb-5" >
         <div class="sticky-content container">
             <div class="container">
-        <div class="row row-cols-xl-12 row-cols-md-12 row-cols-1 g-4">
+        <div class="row row-cols-xl-12 row-cols-md-12 row-cols-1 g-4"> 
+		<div class="ak-section-heading ak-style-1">
+                        <div class="background-text">Services</div>
+                        <h2 class="ak-section-title">Our Services</h2>
+                        
+                    </div>
+                     
             <div class="col">
-                 <p class="desc">As a leading automotive collision repair specialist in Gracefield, One Stop Panel and
-Paint Ltd proudly offers over 10 years of trusted experience, owned and operated by a
+                 <p class="desc">As a leading automotive collision repair specialist in Gracefield, One Stop Panel and Paint <?php echo $year; ?> Ltd proudly offers over 10 years of trusted experience, owned and operated by a
 dedicated New Zealand family since 2023. Over the years, we have earned a reputation
 for excellence, blending family care with top-tier industry standards. Our state-of-theart workshops are equipped with modern technology and tools, enabling us to repair a
 diverse range of vehicle brands to manufacturer specifications. We collaborate closely
@@ -388,23 +393,14 @@ communication, swift turnaround times, and unwavering quality.
 Our highly skilled and knowledgeable team handles all facets of automotive repair
 and refinishing, from minor cosmetic fixes to extensive collision damage. With professionalism, dedication, and meticulous attention to detail, we are committed to restoring
 your vehicles safety, performance, and aesthetic appeal. No matter the damage, you can
-trust One Stop Panel and Paint for expert service, reliable results, and craftsmanship
+trust One Stop Panel and Paint <?php echo $year; ?> Ltd for expert service, reliable results, and craftsmanship
 that endures.
 </p>
             </div>
             
         </div>
     </div>
-            <div class="sidebar width-none">
-                <div class="services-content">
-                    <div class="ak-section-heading ak-style-1">
-                        <div class="background-text" data-aos="fade-right" data-aos-duration="1000">Services</div>
-                        <h2 class="ak-section-title">Our<br> Services</h2>
-                        
-                    </div>
-                     
-                </div>
-            </div>
+            
         </div>
     </div>
     <div class="scroll-end-point"></div>
@@ -434,7 +430,7 @@ that endures.
                             </a>
 							<p class="mt-2 mb-2 p-subtxt"><b>Don’t let accident damage hold you back.</b></p>
 							
-    <p class="custom-fs p-subtxt mb-3">Contact your insurer about One Stop Panel and Paint Ltd at 182 Gracefield Road, and we’ll handle everything. If your vehicle is drivable, we offer appointment-based repairs for seamless scheduling.</p>
+    <p class="custom-fs p-subtxt mb-3">Contact your insurer about One Stop Panel and Paint <?php echo $year; ?> Ltd at 182 Gracefield Road, and we’ll handle everything. If your vehicle is drivable, we offer appointment-based repairs for seamless scheduling.</p>
 	<a href="tel:<?php echo $phone; ?>" class="more-btn1 mt-2">
 <img src="assets/img/phone.svg" alt="..."> Call now to book with the centre nearest you and one of our staff will manage your repair through our facilities.</a>
 							 
@@ -461,7 +457,7 @@ that endures.
 							<p class="mt-2 mb-2 p-subtxt"><b>We prioritise efficient scheduling while never compromising on quality.</b></p>
 							
 						<p class="custom-fs p-subtxt mb-3">In todays fast-paced auto industry, success comes from top equipment and skilled training.
-						At One Stop Panel and Paint, our advanced facilities meet manufacturer specs. We aim
+						At One Stop Panel and Paint <?php echo $year; ?> Ltd, our advanced facilities meet manufacturer specs. We aim
 						for 80% I-CAR trained staff, plus BYD specialist training, ensuring safe, precise repairs
 						that protect your vehicles performance and warranty</p>
 							 <a href="tel:<?php echo $phone; ?>" class="more-btn1 mt-2">
@@ -664,7 +660,7 @@ It’s our promise that your car is repaired to the highest standards, ensuring 
                                 </div>
                                 <h4 class="desp">“Outstanding work by One Stop Panel and Paint! Transformed my car”</h4>
                             </div>
-                            <img src="assets/img/testmaonail_1.png" alt="..." class="testimaonial-slide-img">
+                            <img src="assets/img/testimaonial.png" alt="testimaonial.png" class="testimaonial-slide-img">
                         </div>
                     </div>
                 </div>
