@@ -80,10 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="ak-height-25 ak-height-lg-20"></div>
 
         <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+            <div class="alert alert-success" style="height:fit-content"><?php echo $success; ?></div>
         <?php endif; ?>
         <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
+            <div class="alert alert-danger" style="height:fit-content"><?php echo $error; ?></div>
         <?php endif; ?>
 
         <form id="multi-step-form" class="multi-step-form" method="POST" action="">
@@ -147,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="notes" id="notes">
                     
                     <!-- reCAPTCHA -->
-                      <div class="g-recaptcha" data-sitekey="6LesHdYrAAAAAIKpJQw6vHd_1sOFd5e8bNxIGc3c"></div>
+                      <div class="g-recaptcha" data-sitekey= "<?php echo $_ENV['RECAPTCHA_PUBLIC']; ?>"></div>
+
                 </div>
             </div>
 
