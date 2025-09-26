@@ -2081,12 +2081,7 @@ kbd {
   transition: all 0.4s ease;
 }
 
-.ak-site_header.ak-style1 {
-  /*   .ak-main-header-left {
-  } */
-  /*  .ak-main-header-right {
-  } */
-}
+/*  */
 .ak-site_header.ak-style1 .ak-main_header_in,
 .ak-site_header.ak-style1 .ak-top_header_in {
   display: flex;

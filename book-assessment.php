@@ -5,21 +5,23 @@ use MailerSend\Helpers\Builder\Recipient;
 use MailerSend\Helpers\Builder\EmailParams;
 include 'inc/config.php';
 include 'inc/header.php';
- 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $success = '';
 $error = '';
 
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify reCAPTCHA
-    $recaptcha_secret = 'YOUR_RECAPTCHA_SECRET_KEY'; // Replace with your secret key
+    $recaptcha_secret =  $_ENV['RECAPTCHA_SECRET'];; // Replace with your secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
     
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
-    $captcha_response = json_decode($verify);
-    $captcha_response = 1;
-
-    if ($captcha_response == 1) {
+    $captcha_result = json_decode($verify);
+  
+    if ($captcha_result->success == 1) {
         $date = $_POST['date'] ?? '';
         $time = $_POST['time'] ?? '';
         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
@@ -35,10 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             var_dump($_ENV['MAILERSEND_API_KEY']); // Debug: Check if API key is loaded
             $mailersend = new MailerSend(['api_key' => $_ENV['MAILERSEND_API_KEY']]);
-            $recipients = [new Recipient($email, $name)];
+            $recipients = [new Recipient("onestoppanel2023@gmail.com", "onestoppanel")];
             $emailParams = (new EmailParams())
-                ->setFrom('onestoppanel2023@gmail.com') // Ensure this is verified
-                ->setTo($recipients)
+                ->setFrom('no-reply@onestoppanelandpaint.co.nz') // Ensure this is verified
+                ->setFromName("onestoppanel")
+                ->setRecipients($recipients)
+                ->setReplyTo($email)
                 ->setSubject('Appointment Confirmation')
                 ->setHtml("
                     <h3>Appointment Details</h3>
@@ -58,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mailersend->email->send($emailParams);
             $success = 'Appointment booked successfully! Confirmation email sent.';
         } catch (Exception $e) {
-            $error = 'Failed to send email: ' . $e->getMessage();
+            echo $e->getMessage();
         }
     } else {
         $error = 'reCAPTCHA verification failed. Please try again.';
@@ -143,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="notes" id="notes">
                     
                     <!-- reCAPTCHA -->
-                    <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+                      <div class="g-recaptcha" data-sitekey="6LesHdYrAAAAAIKpJQw6vHd_1sOFd5e8bNxIGc3c"></div>
                 </div>
             </div>
 
