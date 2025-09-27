@@ -2241,7 +2241,7 @@ kbd {
 
 .ak-gescout_sticky {
   position: fixed !important;
-  top: -150px;
+  /*top: -150px;*/
   transition: all 0.4s ease;
 }
 

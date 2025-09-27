@@ -15,7 +15,7 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify reCAPTCHA
-    $recaptcha_secret =  $_ENV['RECAPTCHA_SECRET'];; // Replace with your secret key
+    $recaptcha_secret =  $_ENV['RECAPTCHA_SECRET']; // Replace with your secret key
     $recaptcha_response = $_POST['g-recaptcha-response'];
     
     $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
@@ -79,14 +79,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="ak-height-25 ak-height-lg-20"></div>
 
-        <?php if ($success): ?>
+       
+
+        <form id="multi-step-form" class="multi-step-form" method="POST" action="">
+		 <?php if ($success): ?>
             <div class="alert alert-success" style="height:fit-content"><?php echo $success; ?></div>
         <?php endif; ?>
         <?php if ($error): ?>
             <div class="alert alert-danger" style="height:fit-content"><?php echo $error; ?></div>
         <?php endif; ?>
-
-        <form id="multi-step-form" class="multi-step-form" method="POST" action="">
             <!-- Step 1: Select Date and Time -->
             <div class="step active" data-step="1">
                 <h3>Pick a Date and Time</h3>

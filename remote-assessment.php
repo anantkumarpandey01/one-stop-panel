@@ -1,5 +1,112 @@
-<?php include 'inc/config.php'; ?>
-<?php include 'inc/header.php'; ?>
+<?php
+require 'vendor/autoload.php';
+use MailerSend\MailerSend;
+use MailerSend\Helpers\Builder\Recipient;
+use MailerSend\Helpers\Builder\EmailParams;
+use MailerSend\Helpers\Builder\Attachment;
+include 'inc/config.php';
+include 'inc/header.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$success = '';
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verify reCAPTCHA
+    $recaptcha_secret = $_ENV['RECAPTCHA_SECRET'];
+    $recaptcha_response = $_POST['g-recaptcha-response'];
+    
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
+    $captcha_result = json_decode($verify);
+  
+    if ($captcha_result->success == 1) {
+        $repair_centre = filter_var($_POST['repair_centre'], FILTER_SANITIZE_STRING);
+        $first_name = filter_var($_POST['first_name'], FILTER_SANITIZE_STRING);
+        $last_name = filter_var($_POST['last_name'], FILTER_SANITIZE_STRING);
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $mobile = filter_var($_POST['mobile'], FILTER_SANITIZE_STRING);
+        $alt_phone = filter_var($_POST['alt_phone'], FILTER_SANITIZE_STRING);
+        $company = filter_var($_POST['company'], FILTER_SANITIZE_STRING);
+        $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
+        $registration = filter_var($_POST['registration'], FILTER_SANITIZE_STRING);
+        $make = filter_var($_POST['make'], FILTER_SANITIZE_STRING);
+        $model = filter_var($_POST['model'], FILTER_SANITIZE_STRING);
+        $year = filter_var($_POST['year'], FILTER_SANITIZE_STRING);
+        $insurance_company = filter_var($_POST['insurance_company'], FILTER_SANITIZE_STRING);
+        $accident_desc = filter_var($_POST['accident_desc'], FILTER_SANITIZE_STRING);
+        $claim_number = filter_var($_POST['claim_number'], FILTER_SANITIZE_STRING);
+
+        // Handle file attachments with label names
+        $attachments = [];
+        $upload_fields = [
+            'upload1' => 'Overall image of vehicle and damage',
+            'upload2' => 'Overall image of vehicle front (including rego)',
+            'upload3' => 'Images of vehicle from rear (including rego)',
+            'upload4' => 'Image of undamaged side',
+            'upload5' => 'Image of damaged area',
+            'upload6' => 'Close up of internal damage',
+            'upload7' => 'Registration sticker',
+            'upload8' => 'Road user charges (RUC) label (For diesel vehicles only)',
+            'upload9' => 'Warrant of fitness sticker',
+            'upload10' => 'Image showing current mileage',
+            'upload11' => 'Overall image of the interior',
+            'upload12' => 'Any old unrelated damage'
+        ];
+        foreach ($upload_fields as $field => $label) {
+            if (!empty($_FILES[$field]['name']) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
+                $fileContent = file_get_contents($_FILES[$field]['tmp_name']);
+                $fileExtension = pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION);
+                $fileName = $label . '.' . $fileExtension;
+                $attachments[] = new Attachment($fileContent, $fileName, 'attachment');
+            }
+        }
+
+        // Send email using MailerSend
+        try {
+            $mailersend = new MailerSend(['api_key' => $_ENV['MAILERSEND_API_KEY']]);
+            $recipients = [new Recipient("onestoppanel2023@gmail.com", "onestoppanel")];
+            $emailParams = (new EmailParams())
+                ->setFrom('no-reply@onestoppanelandpaint.co.nz')
+                ->setFromName("onestoppanel")
+                ->setRecipients($recipients)
+                ->setReplyTo($email)
+                ->setSubject('Remote Assessment Request')
+                ->setHtml("
+                    <h3>Remote Assessment Request</h3>
+                    <p><strong>Repair Centre:</strong> $repair_centre</p>
+                    <h4>Driver's Info</h4>
+                    <p><strong>First Name:</strong> $first_name</p>
+                    <p><strong>Last Name:</strong> $last_name</p>
+                    <p><strong>Email:</strong> $email</p>
+                    <p><strong>Mobile:</strong> $mobile</p>
+                    <p><strong>Alternate Phone:</strong> $alt_phone</p>
+                    <p><strong>Company:</strong> $company</p>
+                    <p><strong>Address:</strong> $address</p>
+                    <h4>Vehicle Info</h4>
+                    <p><strong>Registration:</strong> $registration</p>
+                    <p><strong>Make:</strong> $make</p>
+                    <p><strong>Model:</strong> $model</p>
+                    <p><strong>Year:</strong> $year</p>
+                    <h4>Insurance Info</h4>
+                    <p><strong>Insurance Company:</strong> $insurance_company</p>
+                    <p><strong>Accident Description:</strong> $accident_desc</p>
+                    <p><strong>Claim Number:</strong> $claim_number</p>
+                ")
+                ->setText("Remote Assessment Request\nRepair Centre: $repair_centre\n\nDriver's Info\nFirst Name: $first_name\nLast Name: $last_name\nEmail: $email\nMobile: $mobile\nAlternate Phone: $alt_phone\nCompany: $company\nAddress: $address\n\nVehicle Info\nRegistration: $registration\nMake: $make\nModel: $model\nYear: $year\n\nInsurance Info\nInsurance Company: $insurance_company\nAccident Description: $accident_desc\nClaim Number: $claim_number")
+                ->setAttachments($attachments);
+
+            $mailersend->email->send($emailParams);
+            $success = 'Assessment request submitted successfully!';
+        } catch (Exception $e) {
+            $error = 'Failed to submit request: ' . $e->getMessage();
+        }
+    } else {
+        $error = 'reCAPTCHA verification failed. Please try again.';
+    }
+}
+?>
+
 <div class="ak-height-100 ak-height-lg-40"></div>
 <div class="container my-5">
     <h2 class="text-center mb-4 text-white">Remote Assessment Request</h2>
@@ -10,6 +117,12 @@
     </p>
 
     <form method="post" enctype="multipart/form-data" class="assessment-form">
+        <?php if ($success): ?>
+            <div class="alert alert-success" style="height:fit-content"><?php echo $success; ?></div>
+        <?php endif; ?>
+        <?php if ($error): ?>
+            <div class="alert alert-danger" style="height:fit-content"><?php echo $error; ?></div>
+        <?php endif; ?>
         
         <!-- Closest Repair Centre -->
         <div class="mb-3">
@@ -78,6 +191,9 @@
             ?>
         </div>
 
+        <!-- reCAPTCHA -->
+        <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['RECAPTCHA_PUBLIC']; ?>"></div>
+
         <button type="submit" class="btn-submit w-100 mt-3">Submit</button>
     </form>
 </div>
@@ -99,9 +215,8 @@ h5 {
     margin-bottom: 10px;
 }
 
-button
-{
-	padding: 10px 20px;
+button {
+    padding: 10px 20px;
     background: #ff4500;
     border: none;
     color: #fff;
@@ -110,4 +225,5 @@ button
 }
 </style>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <?php include 'inc/footer.php'; ?>
