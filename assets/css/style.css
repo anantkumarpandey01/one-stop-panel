@@ -5061,3 +5061,26 @@ font-size: 14px;
 		align-items: center;
 	}
 }
+
+
+.marquee-section {
+            background-color: #1a1a1a;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+        }
+        .marquee {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+            color: #ff3d24;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .marquee span {
+            margin-right: 50px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
