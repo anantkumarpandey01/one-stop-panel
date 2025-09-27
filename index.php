@@ -278,8 +278,9 @@
 	 <!-- Marquee Section -->
         <div class="marquee-section">
             <div class="marquee">
-                <span>We are trusted partners with most leading insurance companies, making your panel and paint job process smooth and stress-free. From claim approvals to quality repairs, we ensure your vehicle is restored to its best condition with minimal hassle.</span>
-                <span>We are trusted partners with most leading insurance companies, making your panel and paint job process smooth and stress-free. From claim approvals to quality repairs, we ensure your vehicle is restored to its best condition with minimal hassle.</span>
+                <span>We are trusted partners with most leading insurance companies, making your panel and paint job process smooth and stress-free. </span>
+                <span>We are trusted partners with most leading insurance companies, making your panel and paint job process smooth and stress-free. </span>
+                <span>We are trusted partners with most leading insurance companies, making your panel and paint job process smooth and stress-free. </span>
             </div>
         </div>
         
